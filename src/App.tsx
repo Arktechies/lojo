@@ -1,8 +1,22 @@
-import * as React from "react"
-import { Search, ShoppingCart, TrendingUp, PlayCircle, PauseCircle, Plus, X, Users, Star, ArrowUpRight, DollarSign, Percent, ShoppingBag } from "lucide-react"
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import * as React from "react";
+import {
+  Search,
+  ShoppingCart,
+  TrendingUp,
+  PlayCircle,
+  PauseCircle,
+  Plus,
+  X,
+  Users,
+  Star,
+  ArrowUpRight,
+  DollarSign,
+  Percent,
+  ShoppingBag,
+} from "lucide-react";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,7 +25,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Card,
   CardHeader,
@@ -19,10 +33,10 @@ import {
   CardDescription,
   CardFooter,
   CardContent,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +44,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -38,49 +52,74 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+} from "@/components/ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function LojoGroupBuy() {
-  const [category, setCategory] = React.useState("")
-  const [subcategory, setSubcategory] = React.useState("")
-  const [product, setProduct] = React.useState("")
-  const [accumulationTime, setAccumulationTime] = React.useState("")
-  const [isAccumulationActive, setIsAccumulationActive] = React.useState(true)
-  const [quantity, setQuantity] = React.useState(1)
-  const [accumulationGroup, setAccumulationGroup] = React.useState([])
-  const [showDepositPrompt, setShowDepositPrompt] = React.useState(false)
+  const [category, setCategory] = React.useState("");
+  const [subcategory, setSubcategory] = React.useState("");
+  const [product, setProduct] = React.useState("");
+  const [accumulationTime, setAccumulationTime] = React.useState("");
+  const [isAccumulationActive, setIsAccumulationActive] = React.useState(true);
+  const [quantity, setQuantity] = React.useState(1);
+  const [accumulationGroup, setAccumulationGroup] = React.useState([]);
+  const [showDepositPrompt, setShowDepositPrompt] = React.useState(false);
   const [existingAccumulation, setExistingAccumulation] = React.useState({
     Fans: {
       count: 562,
       members: 10,
-      date: "2023-11-20"
+      date: "2023-11-20",
     },
-    Tables: null
-  })
+    Tables: null,
+  });
 
-  const categories = ["Electricals", "Furniture"]
+  const categories = ["Electricals", "Furniture"];
   const subcategories = {
     Electricals: ["Appliances"],
-    Furniture: ["Home"]
-  }
+    Furniture: ["Home"],
+  };
   const products = {
     Appliances: ["Fans"],
-    Home: ["Tables"]
-  }
+    Home: ["Tables"],
+  };
 
-
+  //brands
   const brands = [
-    { name: "Orient Electric", contact: "123-456-7890", email: "orient@example.com", preference: 4 },
-    { name: "Havells", contact: "234-567-8901", email: "havells@example.com", preference: 5 },
-    { name: "Bajaj", contact: "345-678-9012", email: "bajaj@example.com", preference: 3 },
-    { name: "Atomberg", contact: "456-789-0123", email: "atomberg@example.com", preference: 2 },
-    { name: "Crompton", contact: "567-890-1234", email: "crompton@example.com", preference: 1 },
-  ].sort((a, b) => b.preference - a.preference)
+    {
+      name: "Orient Electric",
+      contact: "123-456-7890",
+      email: "orient@example.com",
+      preference: 4,
+    },
+    {
+      name: "Havells",
+      contact: "234-567-8901",
+      email: "havells@example.com",
+      preference: 5,
+    },
+    {
+      name: "Bajaj",
+      contact: "345-678-9012",
+      email: "bajaj@example.com",
+      preference: 3,
+    },
+    {
+      name: "Atomberg",
+      contact: "456-789-0123",
+      email: "atomberg@example.com",
+      preference: 2,
+    },
+    {
+      name: "Crompton",
+      contact: "567-890-1234",
+      email: "crompton@example.com",
+      preference: 1,
+    },
+  ].sort((a, b) => b.preference - a.preference);
 
   const handleAccumulationToggle = () => {
-    setIsAccumulationActive(!isAccumulationActive)
-  }
+    setIsAccumulationActive(!isAccumulationActive);
+  };
 
   const handleCreateOrJoinGroup = () => {
     if (!product) return;
@@ -89,29 +128,34 @@ export default function LojoGroupBuy() {
       product: product,
       quantity: quantity,
       price: 1000 * quantity, // Assuming a price of 1000 per unit
-    }
-    setAccumulationGroup([...accumulationGroup, newItem])
-    setShowDepositPrompt(true)
+    };
+    setAccumulationGroup([...accumulationGroup, newItem]);
+    setShowDepositPrompt(true);
 
     // If creating a new group for Tables, update the existingAccumulation
     if (product === "Tables") {
-      setExistingAccumulation(prev => ({
+      setExistingAccumulation((prev) => ({
         ...prev,
         Tables: {
           count: quantity,
           members: 1,
-          date: new Date().toISOString().split('T')[0] // Current date
-        }
-      }))
+          date: new Date().toISOString().split("T")[0], // Current date
+        },
+      }));
     }
-  }
+  };
 
   const handleRemoveFromAccumulationGroup = (itemId) => {
-    setAccumulationGroup(accumulationGroup.filter(item => item.id !== itemId))
-  }
+    setAccumulationGroup(
+      accumulationGroup.filter((item) => item.id !== itemId)
+    );
+  };
 
-  const totalAccumulationValue = accumulationGroup.reduce((sum, item) => sum + item.price, 0)
-  const depositAmount = totalAccumulationValue * 0.01
+  const totalAccumulationValue = accumulationGroup.reduce(
+    (sum, item) => sum + item.price,
+    0
+  );
+  const depositAmount = totalAccumulationValue * 0.01;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -135,7 +179,9 @@ export default function LojoGroupBuy() {
               Empowering Businesses Through Collaborative Buying
             </h1>
             <p className="mt-6 max-w-3xl mx-auto text-xl text-background/90 text-center px-4">
-              Lojo connects buyers and sellers for mutual growth, enabling buyers to save through bulk purchases and sellers to boost revenue with larger orders.
+              Lojo connects buyers and sellers for mutual growth, enabling
+              buyers to save through bulk purchases and sellers to boost revenue
+              with larger orders.
             </p>
             <div className="mt-8 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
               <Button size="lg" className="w-full sm:w-auto text-lg py-6 px-8">
@@ -153,7 +199,14 @@ export default function LojoGroupBuy() {
             xmlns="http://www.w3.org/2000/svg"
             className="animate-spin-slow"
           >
-            <circle cx="60" cy="60" r="58" stroke="currentColor" strokeWidth="4" className="text-background" />
+            <circle
+              cx="60"
+              cy="60"
+              r="58"
+              stroke="currentColor"
+              strokeWidth="4"
+              className="text-background"
+            />
             <path
               d="M60 2C60 2 76 18 76 60C76 102 60 118 60 118"
               stroke="currentColor"
@@ -188,38 +241,57 @@ export default function LojoGroupBuy() {
                 <SelectGroup>
                   <SelectLabel>Categories</SelectLabel>
                   {categories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Select value={subcategory} onValueChange={setSubcategory} disabled={!category}>
+            <Select
+              value={subcategory}
+              onValueChange={setSubcategory}
+              disabled={!category}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select subcategory" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Subcategories</SelectLabel>
-                  {category && subcategories[category].map((subcat) => (
-                    <SelectItem key={subcat} value={subcat}>{subcat}</SelectItem>
-                  ))}
+                  {category &&
+                    subcategories[category].map((subcat) => (
+                      <SelectItem key={subcat} value={subcat}>
+                        {subcat}
+                      </SelectItem>
+                    ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Select value={product} onValueChange={setProduct} disabled={!subcategory}>
+            <Select
+              value={product}
+              onValueChange={setProduct}
+              disabled={!subcategory}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select product" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Products</SelectLabel>
-                  {subcategory && products[subcategory].map((prod) => (
-                    <SelectItem key={prod} value={prod}>{prod}</SelectItem>
-                  ))}
+                  {subcategory &&
+                    products[subcategory].map((prod) => (
+                      <SelectItem key={prod} value={prod}>
+                        {prod}
+                      </SelectItem>
+                    ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Select value={accumulationTime} onValueChange={setAccumulationTime}>
+            <Select
+              value={accumulationTime}
+              onValueChange={setAccumulationTime}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Accumulation time" />
               </SelectTrigger>
@@ -242,7 +314,9 @@ export default function LojoGroupBuy() {
                         {brand.preference}
                       </span>
                     </CardTitle>
-                    <CardDescription>Preference Rank: {index + 1}</CardDescription>
+                    <CardDescription>
+                      Preference Rank: {index + 1}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               ))}
@@ -277,7 +351,9 @@ export default function LojoGroupBuy() {
                   </Label>
                 </div>
               </CardTitle>
-              <CardDescription>Join or create a group buy for better deals!</CardDescription>
+              <CardDescription>
+                Join or create a group buy for better deals!
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {isAccumulationActive ? (
@@ -288,36 +364,49 @@ export default function LojoGroupBuy() {
                         Existing group for Fans
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Members: {existingAccumulation.Fans.members} | Orders: {existingAccumulation.Fans.count}
+                        Members: {existingAccumulation.Fans.members} | Orders:{" "}
+                        {existingAccumulation.Fans.count}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Accumulation confirming on: {existingAccumulation.Fans.date}
+                        Accumulation confirming on:{" "}
+                        {existingAccumulation.Fans.date}
                       </p>
                     </div>
                   ) : product === "Tables" ? (
                     <div>
-                      <p className="text-lg font-semibold">No existing group for Tables</p>
+                      <p className="text-lg font-semibold">
+                        No existing group for Tables
+                      </p>
                       <p className="text-sm text-muted-foreground">
                         Create a new group to start accumulating!
                       </p>
                     </div>
                   ) : (
                     <div>
-                      <p className="text-lg font-semibold">Select a product to see group status</p>
-                      <p className="text-sm text-muted-foreground">Choose from fans or tables</p>
+                      <p className="text-lg font-semibold">
+                        Select a product to see group status
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Choose from fans or tables
+                      </p>
                     </div>
                   )}
                   <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div className="flex items-center gap-2">
-                      <Input 
-                        type="number" 
-                        placeholder="Quantity" 
-                        className="w-24" 
-                        min="1" 
+                      <Input
+                        type="number"
+                        placeholder="Quantity"
+                        className="w-24"
+                        min="1"
                         value={quantity}
-                        onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                        onChange={(e) =>
+                          setQuantity(parseInt(e.target.value) || 1)
+                        }
                       />
-                      <Button onClick={handleCreateOrJoinGroup} disabled={!product}>
+                      <Button
+                        onClick={handleCreateOrJoinGroup}
+                        disabled={!product}
+                      >
                         {product === "Fans" ? (
                           <>
                             <Plus className="mr-2 h-4 w-4" />
@@ -341,8 +430,13 @@ export default function LojoGroupBuy() {
                 </div>
               ) : (
                 <div className="text-center space-y-4">
-                  <p className="text-lg font-semibold mb-4">Accumulation is currently inactive</p>
-                  <p className="text-sm text-muted-foreground">Start accumulating to unlock group buying power and save more!</p>
+                  <p className="text-lg font-semibold mb-4">
+                    Accumulation is currently inactive
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Start accumulating to unlock group buying power and save
+                    more!
+                  </p>
                   <Button onClick={handleAccumulationToggle}>
                     <PlayCircle className="mr-2 h-4 w-4" />
                     Start Accumulation
@@ -374,7 +468,13 @@ export default function LojoGroupBuy() {
                         <TableCell>{item.quantity}</TableCell>
                         <TableCell>${item.price.toFixed(2)}</TableCell>
                         <TableCell>
-                          <Button variant="ghost" size="sm" onClick={() => handleRemoveFromAccumulationGroup(item.id)}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() =>
+                              handleRemoveFromAccumulationGroup(item.id)
+                            }
+                          >
                             <X className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -384,7 +484,9 @@ export default function LojoGroupBuy() {
                 </Table>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <div>Total Accumulation Value: ${totalAccumulationValue.toFixed(2)}</div>
+                <div>
+                  Total Accumulation Value: ${totalAccumulationValue.toFixed(2)}
+                </div>
                 <div>Required Deposit (1%): ${depositAmount.toFixed(2)}</div>
               </CardFooter>
             </Card>
@@ -395,12 +497,18 @@ export default function LojoGroupBuy() {
               <DialogHeader>
                 <DialogTitle>Deposit Required</DialogTitle>
                 <DialogDescription>
-                  To confirm your participation in the accumulation group, please deposit 1% of the total value.
+                  To confirm your participation in the accumulation group,
+                  please deposit 1% of the total value.
                 </DialogDescription>
               </DialogHeader>
               <div className="mt-4">
-                <p className="text-lg font-semibold">Deposit Amount: ${depositAmount.toFixed(2)}</p>
-                <Button className="mt-4" onClick={() => setShowDepositPrompt(false)}>
+                <p className="text-lg font-semibold">
+                  Deposit Amount: ${depositAmount.toFixed(2)}
+                </p>
+                <Button
+                  className="mt-4"
+                  onClick={() => setShowDepositPrompt(false)}
+                >
                   Proceed to Payment
                 </Button>
               </div>
@@ -408,7 +516,10 @@ export default function LojoGroupBuy() {
           </Dialog>
 
           <div className="relative py-10">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
+            <div
+              className="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center">
@@ -421,7 +532,7 @@ export default function LojoGroupBuy() {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
 function SavingsDashboard() {
@@ -433,17 +544,17 @@ function SavingsDashboard() {
     { month: "May", savings: 4800 },
     { month: "Jun", savings: 3800 },
     { month: "Jul", savings: 4300 },
-  ]
+  ];
 
   return (
     <div className="space-y-4">
-      <h2 className="text-3xl font-bold tracking-tight">Lojo Partners Dashboard</h2>
+      <h2 className="text-3xl font-bold tracking-tight">
+        Lojo Partners Dashboard
+      </h2>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Savings
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Total Savings</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -455,9 +566,7 @@ function SavingsDashboard() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Bulk Orders
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Bulk Orders</CardTitle>
             <ShoppingBag className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -483,9 +592,7 @@ function SavingsDashboard() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Users
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -541,13 +648,13 @@ function SavingsDashboard() {
                   <p className="text-sm font-medium leading-none">
                     Office Materials
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    200 units
-                  </p>
+                  <p className="text-sm text-muted-foreground">200 units</p>
                 </div>
                 <div className="ml-auto font-medium">
                   <div className="text-green-600">-$280.00</div>
-                  <div className="text-xs text-muted-foreground">18.9% saved</div>
+                  <div className="text-xs text-muted-foreground">
+                    18.9% saved
+                  </div>
                 </div>
               </div>
               <div className="flex items-center">
@@ -559,9 +666,7 @@ function SavingsDashboard() {
                   <p className="text-sm font-medium leading-none">
                     Electronics Parts
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    500 units
-                  </p>
+                  <p className="text-sm text-muted-foreground">500 units</p>
                 </div>
                 <div className="ml-auto font-medium">
                   <div className="text-green-600">-$175.00</div>
@@ -577,9 +682,7 @@ function SavingsDashboard() {
                   <p className="text-sm font-medium leading-none">
                     Packaging Containers
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    1000 units
-                  </p>
+                  <p className="text-sm text-muted-foreground">1000 units</p>
                 </div>
                 <div className="ml-auto font-medium">
                   <div className="text-green-600">-$300.00</div>
@@ -591,5 +694,5 @@ function SavingsDashboard() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
